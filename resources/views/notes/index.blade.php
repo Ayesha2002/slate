@@ -42,7 +42,6 @@
 
 @if($viewType === 'grid')
 
-    <!-- ⭐⭐⭐ GOOGLE KEEP MASONRY GRID ⭐⭐⭐ -->
 
     <style>
         .note-column-layout {
@@ -85,13 +84,18 @@
 
             <p class="whitespace-pre-line break-words">{{ $note->content }}</p>
 
-            <form action="{{ route('notes.destroy', $note->id) }}" method="POST" class="mt-4">
-                @csrf
-                @method('DELETE')
-                <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-                    Delete
-                </button>
-            </form>
+            <form id="delete-form-{{ $note->id }}"
+      action="{{ route('notes.destroy', $note->id) }}"
+      method="POST" class="mt-4">
+    @csrf
+    @method('DELETE')
+
+    <button type="button"
+        onclick="confirmDelete({{ $note->id }})"
+        class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+        Delete
+    </button>
+</form>
 
         </div>
         @endforeach
@@ -101,7 +105,6 @@
 
 @else
 
-    <!-- ⭐⭐⭐ LIST VIEW ⭐⭐⭐ -->
 
     <div class="space-y-4">
 
@@ -113,15 +116,19 @@
 
                 <p class="whitespace-pre-line break-words">{{ $note->content }}</p>
 
-                <form action="{{ route('notes.destroy', $note->id) }}"
-                      method="POST" class="mt-4">
-                    @csrf
-                    @method('DELETE')
+                <form id="delete-form-{{ $note->id }}"
+      action="{{ route('notes.destroy', $note->id) }}"
+      method="POST" class="mt-4">
+    @csrf
+    @method('DELETE')
 
-                    <button class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
-                        Delete
-                    </button>
-                </form>
+    <button type="button"
+        onclick="confirmDelete({{ $note->id }})"
+        class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+        Delete
+    </button>
+</form>
+
             </div>
         @endforeach
 
@@ -130,3 +137,21 @@
 @endif
 
 @endsection
+
+<script>
+function confirmDelete(id) {
+    Swal.fire({
+        title: "Delete this note?",
+        text: "This action cannot be undone.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('delete-form-' + id).submit();
+        }
+    });
+}
+</script>

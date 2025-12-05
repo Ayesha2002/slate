@@ -47,7 +47,7 @@ class NoteController extends Controller
             'color'=>'required'
         ]);
         Note::create($request->all());
-        return redirect('/notes')->with('success','Note recieved!');
+        return redirect('/notes')->with('success','Note recieved!');//success note
     }
 
     /**
@@ -80,7 +80,7 @@ class NoteController extends Controller
     public function destroy(Note $note)
     {
         $note->delete();
-        return redirect()->back()->with('success','Note removed!');
+        return redirect()->back()->with('success','Note removed!');//delete note
 
     }
 }
